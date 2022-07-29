@@ -6,7 +6,7 @@ from flights import serializers
 from flights.models import Booking, Flight
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 
-from .permissions import IsAuthor
+from .permissions import HasAuthority, IsMoreThan3Days
 class FlightsList(generics.ListAPIView):
     queryset = Flight.objects.all()
     serializer_class = serializers.FlightSerializer
@@ -26,7 +26,7 @@ class BookingDetails(generics.RetrieveAPIView):
     serializer_class = serializers.BookingDetailsSerializer
     lookup_field = "id"
     lookup_url_kwarg = "booking_id"
-    permission_classes = [IsAdminUser]
+    permission_classes = [HasAuthority]
 
 
 
@@ -34,7 +34,7 @@ class UpdateBooking(generics.RetrieveUpdateAPIView):
     queryset = Booking.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "booking_id"
-    permission_classes = [IsAdminUser, IsAuthor]
+    permission_classes = [HasAuthority, IsMoreThan3Days]
 
 
     def get_serializer_class(self):
@@ -48,7 +48,7 @@ class CancelBooking(generics.DestroyAPIView):
     queryset = Booking.objects.all()
     lookup_field = "id"
     lookup_url_kwarg = "booking_id"
-    permission_classes = [IsAdminUser]
+    permission_classes = [HasAuthority, IsMoreThan3Days]
 
 
 
